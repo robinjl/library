@@ -4,17 +4,20 @@
   {% block title %}<title>Local Library</title>{% endblock %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% load static %}
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}">
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
         integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
 </head>
 <body>
-<nav class="navbar navbar-dark fixed-top bg-primary">
-  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">Local Library</a>
+<nav class="navbar navbar-dark fixed-top bg-dark">
+  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">
+    Local Library
+  </a>
   <div class="dropdown">
     <a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
       {{ user.get_username }}
@@ -32,19 +35,22 @@
         {% block sidebar %}
           <ul class="nav flex-column pt-3">
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'index' %}">
+              <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}"
+                 href="{% url 'index' %}">
                 <i class="fas fa-home"></i>
                 Home
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'books' %}">
+              <a class="nav-link {% if request.resolver_match.url_name == 'books' %}active{% endif %}"
+                 href="{% url 'books' %}">
                 <i class="fas fa-book"></i>
                 All books
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'authors' %}">
+              <a class="nav-link {% if request.resolver_match.url_name == 'authors' %}active{% endif %}"
+                 href="{% url 'authors' %}">
                 <i class="fas fa-user"></i>
                 All authors
               </a>
@@ -54,7 +60,8 @@
           <ul class="nav flex-column pt-3">
             {% if user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'my-borrowed' %}">
+                <a class="nav-link {% if request.resolver_match.url_name == 'my-borrowed' %}active{% endif %}"
+                   href="{% url 'my-borrowed' %}">
                   <i class="fas fa-bookmark"></i>
                   My borrowed
                 </a>
@@ -69,7 +76,8 @@
               {% if perms.catalog.can_mark_returned %}
                 <li class="nav-item">Staff</li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'all-borrowed' %}">
+                  <a class="nav-link {% if request.resolver_match.url_name == 'all-borrowed' %}active{% endif %}"
+                     href="{% url 'all-borrowed' %}">
                     <i class="fas fa-bookmark"></i>
                     All borrowed
                   </a>
@@ -83,6 +91,18 @@
 
     <main role="main" class="col-sm-10 ml-sm-auto px-4">
       <nav class="pt-5">
+        {% block breadcrumbs %}
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item active">
+                <a href="{% url 'index' %}">Home</a>
+              </li>
+              {% block crumbs %}
+              {% endblock %}
+            </ol>
+          </nav>
+        {% endblock %}
+
         {% block content %}{% endblock %}
 
         {% block pagination %}

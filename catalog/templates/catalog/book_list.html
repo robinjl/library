@@ -1,7 +1,12 @@
 {% extends "base_generic.html" %}
 
+{% block crumbs %}
+  <li class="breadcrumb-item">
+    <a>Book List</a>
+  </li>
+{% endblock %}
+
 {% block content %}
-  <h1>Book List</h1>
   {% if book_list %}
     <table class="table table-bordered table-hover">
       <thead>
