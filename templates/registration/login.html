@@ -1,0 +1,32 @@
+{% extends "login_generic.html" %}
+
+{% block content %}
+  <form class="form-signin" method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+
+    {% if form.errors %}
+      <p class="text-danger">Your username and password didn't match. Please try again.</p>
+    {% endif %}
+
+    {% if next %}
+      {% if user.is_authenticated %}
+        <p class="text-danger">Your account doesn't have access to this page. To proceed,
+          please login with an account that has access.</p>
+      {% endif %}
+    {% endif %}
+
+    <label for="username" class="sr-only">{{ form.username.label_tag }}</label>
+    <input id="username" class="form-control" type="text" name="username" value="">
+
+    <label for="password" class="sr-only">{{ form.password.label_tag }}</label>
+    <input id="password" class="form-control" type="password" name="password" value="">
+
+    <button class="btn btn-large btn-primary btn-block" type="submit">Sign in</button>
+    <input type="hidden" name="next" value="{{ next }}"/>
+
+    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+    <p class="mt-5 mb-3 text-muted">Local Library by Django</p>
+
+  </form>
+
+{% endblock %}
