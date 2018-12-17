@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import permission_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from catalog.models import Author
+from django.contrib import messages
 
 
 def index(request):
@@ -37,7 +38,7 @@ def index(request):
 
 class BookListView(generic.ListView):
     model = Book
-    paginate_by = 2
+    paginate_by = 10
 
 
 class BookDetailView(generic.DetailView):
@@ -99,15 +100,25 @@ def renew_book_librarian(request, pk):
 
 class AuthorCreate(CreateView):
     model = Author
-    fields = '__all__'
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
     initial = {'date_of_death:': '13/12/2018'}
+    success_url = reverse_lazy('authors')
 
 
 class AuthorUpdate(UpdateView):
     model = Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    success_url = reverse_lazy('authors')
 
 
 class AuthorDelete(DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
+
+
+def delete_author(request, pk):
+    author = get_object_or_404(Author, id=pk)
+    if request.user.is_staff:
+        author.delete()
+        messages.success(request, 'delete successful')
+        return HttpResponseRedirect(reverse('authors'))

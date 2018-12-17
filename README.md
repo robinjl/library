@@ -7,6 +7,7 @@
 - Django (Python3)
 - Django Rest Framework
 - MySQL
+- Bootstrap 4
 
 ## 设计思路
 - 需求文档 / 功能列表 (Markdown)
@@ -47,6 +48,11 @@
   -[ ] 图片上传，图片服务器 (Image Upload)
   -[ ] 提示窗口 (Alert)
   -[ ] 推送 (Push Notification)
-  -[ ] web 小图标 (favicon)
+  -[x] web 小图标 (favicon)
   -[ ] 表单样式及value (Form)
-  -[ ] 时间选择 (Datetime Picker)
+  -[x] 时间选择 (Datetime Picker) 
+  refs: [Bootstrap Datepicker](https://github.com/uxsolutions/bootstrap-datepicker)
+  -[ ] 撤销 (undo)
+  -[ ] 删除 Model via Ajax
+  refs: [Delete Model object in django Using jquery Ajax](https://stackoverflow.com/questions/40861518/delete-model-object-in-django-using-jquery-ajax)
+  [Button in html that deletes an instance of a Django model](https://stackoverflow.com/questions/34234580/button-in-html-that-deletes-an-instance-of-a-django-model)

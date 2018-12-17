@@ -3,6 +3,7 @@ from django.urls import reverse
 import uuid
 from django.contrib.auth.models import User
 from datetime import date
+from django.utils import timezone
 
 
 class Genre(models.Model):
@@ -77,9 +78,10 @@ class Author(models.Model):
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField(null=True, blank=True)
     date_of_death = models.DateField('Died', null=True, blank=True)
+    time_of_create = models.DateTimeField('CreateTime', default=timezone.now)
 
     class Meta:
-        ordering = ['last_name', 'first_name']
+        ordering = ['-time_of_create']
 
     def get_absolute_url(self):
         return reverse('author-detail', args=[str(self.id)])
