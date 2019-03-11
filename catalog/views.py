@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from catalog.models import Book, BookInstance, Author, Genre
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 import datetime
 from catalog.forms import RenewBookForm
@@ -33,6 +33,7 @@ def index(request):
         'num_visits': num_visits,
     }
 
+    messages.success(request, 'message')
     return render(request, 'index.html', context=context)
 
 
@@ -43,6 +44,23 @@ class BookListView(generic.ListView):
 
 class BookDetailView(generic.DetailView):
     model = Book
+
+
+class BookCreateView(CreateView):
+    model = Book
+    fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
+    success_url = reverse_lazy('books')
+
+
+class BookUpdateView(UpdateView):
+    model = Book
+    fields = []
+
+
+def delete_book(request, pk):
+    book = get_object_or_404(Book, id=pk)
+
+
 
 
 class AuthorListView(generic.ListView):
@@ -111,14 +129,18 @@ class AuthorUpdate(UpdateView):
     success_url = reverse_lazy('authors')
 
 
-class AuthorDelete(DeleteView):
-    model = Author
-    success_url = reverse_lazy('authors')
+# class AuthorDelete(DeleteView):
+#     model = Author
+#     success_url = reverse_lazy('authors')
 
 
 def delete_author(request, pk):
     author = get_object_or_404(Author, id=pk)
     if request.user.is_staff:
         author.delete()
-        messages.success(request, 'delete successful')
-        return HttpResponseRedirect(reverse('authors'))
+        messages.success(request, 'delete successful', extra_tags='safe')
+        response = {
+            'status': 1,
+            'message': 'delete successful'
+        }
+        return JsonResponse(response)

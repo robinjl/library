@@ -7,6 +7,22 @@
 {% endblock %}
 
 {% block content %}
+
+  {% if messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <ul class="messages">
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            {{ message }}
+          </li>
+        {% endfor %}
+      </ul>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  {% endif %}
+
   <a class="btn btn-primary btn-sm mb-3" href="{% url 'author_create' %}">
     <i class="fas fa-plus"></i>
     Create
@@ -80,11 +96,11 @@
                   beforeSend: (xhr) => {
                       xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
                   },
-                  {#dataType: 'application/json',#}
-                  {#contentType: 'application/json',#}
-                  success: (e) => {
-                      console.log(e);
-                      $('#modal').modal('hide');
+                  success: () => {
+                      setTimeout(() => {
+                          window.location.reload();
+                          $('.alert').alert('close');
+                      }, 1000);
                   },
                   error: (e) => {
                       console.log(e)

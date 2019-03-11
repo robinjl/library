@@ -1,0 +1,20 @@
+{% extends "base_generic.html" %}
+
+{% block crumbs %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'books' %}">Book List</a>
+  </li>
+  <li class="breadcrumb-item">
+    Create Book
+  </li>
+{% endblock %}
+
+{% block content %}
+  <form action="" method="post">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    <input class="btn btn-primary offset-1" type="submit" value="Submit"/>
+  </form>
+{% endblock %}
